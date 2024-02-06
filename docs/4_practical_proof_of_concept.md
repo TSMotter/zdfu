@@ -420,6 +420,7 @@ mcumgr-client 0.0.3, Copyright © 2023 Vouch.io LLC
 01:03:34 [INFO] 100104 bytes to transfer
   [00:00:14] [=====================================================================================================================================================================================] 97.76 KiB/97.76 KiB (0s)01:03:48 [INFO] upload took 14s
 ```
+
 - Listing the 2 binaries available in the embedded target device memory
 ```bash
 (.venv) ggm@gAN515-52:~/zephyrproject/zdfu (master)$ mcumgr -c ggmconn image list
@@ -456,13 +457,11 @@ Split status: N/A (0)
 
 - At this stage, the embedded target device reboots and boots running "Binary Two", but when I list the images available, I expected to see 2 images, but rather I just see a single image present on memory
 
-- Right now it is not clear yet why this is happening, but there are some suspects:
+- THis seems to be because I'm not configuring `CONFIG_BOOT_SWAP_USING_SCRATCH=y`
 
-    - For some reason mcuboot boots as a secondary bootloader in this case, which might be related to this situation
+- Because of that, mcuboot is not using the scratch approach and there is no fallback
 
-    - Needs further investigation
-
-    - Once this is figured out, next step is to make it work via bluetooth
+- If I try to enable this option, currently I get a link error telling me that there is not enough DRAM memory available
 
 ```bash
 [esp32] [INF] MCUboot 2nd stage bootloader
